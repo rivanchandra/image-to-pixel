@@ -1,11 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { PhotoIcon } from '@heroicons/react/24/solid';
+import React, { useState } from 'react';
 import Slider from '@mui/material/Slider';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import { ChromePicker } from 'react-color';
 import Popper from '@mui/material/Popper';
 import { Pixelify } from "react-pixelify";
+
+let seq = 0;
+let localStorageData;
 
 export default function Home() {
   const [image, setImage] = useState([]);
@@ -14,12 +16,28 @@ export default function Home() {
   const [pixelSize, setPixelSize] = useState(10);
   const [background, setBackground] = useState('#000');
   const [centered, setCentered] = useState(true);
+  const [list, setList] = useState([]);
 
   const handleImageUpload = (event) => {
     const uploadedImage = event.target.files[0];
-    localStorage.setItem('upload', [image, URL.createObjectURL(uploadedImage)])
+
+    let prevData = list;
+    seq += 1;
+    let newData = [{id:'picture '+seq, image:URL.createObjectURL(uploadedImage)}];
+    localStorageData = [...prevData, ...newData];
+
+    setList(localStorageData);
     setImage(URL.createObjectURL(uploadedImage));
   };
+
+  const handleDelete = (id) => {
+    setList((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
+  const changeImage = (id) => {
+    let chosen = list.filter((item) =>item.id === id);
+    setImage(chosen[0].image)
+  }
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -38,21 +56,47 @@ export default function Home() {
           <form className="p-4 bg-white rounded-md shadow-md">
             <div>
               <label
-                  class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
-                  <span class="flex items-center space-x-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
+                  className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                  <span className="flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24"
                           stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round"
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>
-                      <span class="font-medium text-gray-600">
+                      <span className="font-medium text-gray-600">
                           Click to upload, or &nbsp;
-                          <span class="text-blue-600 underline">browse</span>
+                          <span className="text-blue-600 underline">browse</span>
                       </span>
                   </span>
-                  <input type="file" name="file_upload" class="hidden" onChange={handleImageUpload} />
+                  <input type="file" name="file_upload" className="hidden" onChange={handleImageUpload} />
               </label>
             </div>
+            <ul className="divide-y divide-gray-200">
+              {list.map((item) => (
+                <li key={item.id} className="flex items-center py-1 cursor-pointer hover:bg-blue-100 rounded-md">
+                  <div className="flex-1 p-1" onClick={() => changeImage(item.id)}>{item.id}</div>
+                  <button
+                    className="ml-auto p-1"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-500 hover:text-red-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
               <dt className="text-sm font-medium leading-6 text-gray-900">Height</dt>
               <dd className="mt-1 leading-6 sm:col-span-2 sm:mt-0">

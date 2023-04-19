@@ -50,8 +50,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-cover bg-no-repeat bg-fixed bg-center bg-gradient-to-r from-purple-200 to-pink-200">
-      <div className="h-screen flex flex-row justify-center items-center">
-        <div className="w-1/2 p-4 backdrop-filter backdrop-blur-lg rounded-md ">
+      <div className="xl:h-screen flex flex-col justify-center items-center sm:flex-row">
+        <div className="w-full sm:w-1/2 p-4 backdrop-filter backdrop-blur-lg rounded-md">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Image to Pixel</h1>
           <form className="p-4 bg-white rounded-md shadow-md">
             <div>
@@ -148,7 +148,7 @@ export default function Home() {
             </div>
           </form>
         </div>
-        <div className="w-1/2 p-4">
+        <div className="xl:w-1/2 p-4">
           {image && 
           <Pixelify
             src={image}

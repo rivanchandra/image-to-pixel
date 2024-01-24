@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.title {
+  font-family: 'Pixelify Sans', sans-serif;
+}

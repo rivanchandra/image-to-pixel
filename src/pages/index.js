@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { ChromePicker } from 'react-color';
 import Popper from '@mui/material/Popper';
 import { Pixelify } from "react-pixelify";
+import Image from 'next/image';
 
 let seq = 0;
 let localStorageData;
@@ -49,10 +50,18 @@ export default function Home() {
   const id = open ? 'simple-popper' : undefined;
 
   return (
-    <div className="min-h-screen bg-cover bg-no-repeat bg-fixed bg-center bg-gradient-to-r from-purple-200 to-pink-200">
+    <div className="min-h-screen bg-cover bg-no-repeat bg-fixed bg-center bg-gradient-to-r from-gray-200 to-pink-200 to-white">
       <div className="xl:h-screen flex flex-col justify-center items-center sm:flex-row">
         <div className="w-full sm:w-1/2 p-4 backdrop-filter backdrop-blur-lg rounded-md">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Image to Pixel</h1>
+          <div class="flex items-center space-x-2">
+            <div class="h-8 w-8">
+            <Image src="/logo.png" alt="Example Image" width={50} height={50} />
+            </div>
+            
+            <div>
+              <h1 class="text-3xl font-bold tracking-tight text-gray-900 title">Image to Pixel</h1>
+            </div>
+          </div>
           <form className="p-4 bg-white rounded-md shadow-md">
             <div>
               <label
